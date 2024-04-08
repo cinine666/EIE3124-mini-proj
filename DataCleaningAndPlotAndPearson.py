@@ -4,7 +4,7 @@ import numpy as np
 from scipy.stats import linregress
 
 # Read the dataset
-names = ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE','DIS','RAD','TAX','PTRATIO','B','LSTAT','MEDV']
+names = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 dataset = pd.read_csv('boston.csv', skiprows=1, names=names)
 
 # Identify missing values
@@ -24,7 +24,7 @@ z_scores = np.abs((dataset - dataset.mean()) / dataset.std())
 dataset = dataset[(z_scores < 3).all(axis=1)]
 
 # Impute missing values (Replace missing values with mean)
-dataset = dataset.fillna(dataset.mean())  
+dataset = dataset.fillna(dataset.mean())
 
 # Scatter plot and fitted curve for LSTAT
 plt.figure(figsize=(10, 6))
@@ -55,10 +55,44 @@ plt.ylabel('MEDV')
 plt.legend()
 plt.show()
 
+# Scatter plot and fitted curves for NOX
+plt.figure(figsize=(10, 6))
+plt.scatter(dataset['NOX'], dataset['MEDV'], c='g', label='NOX')
+
+slope, intercept, r_value, p_value, std_err = linregress(dataset['NOX'], dataset['MEDV'])
+x_values = np.linspace(dataset['NOX'].min(), dataset['NOX'].max(), 100)
+y_values = slope * x_values + intercept
+plt.plot(x_values, y_values, c='b', label='Fitted Curve')
+
+plt.xlabel('NOX')
+plt.ylabel('MEDV')
+plt.legend()
+plt.show()
+
+# Scatter plot and fitted curves for TAX
+plt.figure(figsize=(10, 6))
+plt.scatter(dataset['TAX'], dataset['MEDV'], c='m', label='TAX')
+
+slope, intercept, r_value, p_value, std_err = linregress(dataset['TAX'], dataset['MEDV'])
+x_values = np.linspace(dataset['TAX'].min(), dataset['TAX'].max(), 100)
+y_values = slope * x_values + intercept
+plt.plot(x_values, y_values, c='b', label='Fitted Curve')
+
+plt.xlabel('TAX')
+plt.ylabel('MEDV')
+plt.legend()
+plt.show()
+
 # Pearson correlation coefficient
-correlation_matrix = dataset[['LSTAT', 'RM', 'MEDV']].corr()
+correlation_matrix = dataset[['LSTAT', 'RM', 'NOX', 'TAX', 'MEDV']].corr()
 pearson_coefficient = correlation_matrix.loc['LSTAT', 'MEDV']
 print("Pearson correlation coefficient between LSTAT and MEDV:", pearson_coefficient)
 
 pearson_coefficient = correlation_matrix.loc['RM', 'MEDV']
 print("Pearson correlation coefficient between RM and MEDV:", pearson_coefficient)
+
+pearson_coefficient = correlation_matrix.loc['NOX', 'MEDV']
+print("Pearson correlation coefficient between NOX and MEDV:", pearson_coefficient)
+
+pearson_coefficient = correlation_matrix.loc['TAX', 'MEDV']
+print("Pearson correlation coefficient between TAX and MEDV:", pearson_coefficient)
