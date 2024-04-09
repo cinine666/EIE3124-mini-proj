@@ -96,7 +96,7 @@ plt.show()
     
 r_square = r2_score(testing_data['MEDV'],predict)
 print('k-fold :',r_square)
-s
+
 
 model = training(training_data)
 
